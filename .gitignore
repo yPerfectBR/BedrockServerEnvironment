@@ -49,9 +49,11 @@ coverage/
 bedrockServer/*
 !bedrockServer/.gitkeep
 !bedrockServer/development_behavior_packs/
-bedrockServer/development_behavior_packs/**
+bedrockServer/development_behavior_packs/*
+!bedrockServer/development_behavior_packs/**
 !bedrockServer/development_resource_packs/
-bedrockServer/development_resource_packs/**
+bedrockServer/development_resource_packs/*
+!bedrockServer/development_resource_packs/**
 
 # Docker
 docker-compose.override.yml
