@@ -45,15 +45,13 @@ coverage/
 .vitest/
 *.lcov
 
-# Bedrock Server - Ignorar tudo exceto .gitkeep
+# Bedrock Server - Ignorar tudo exceto .gitkeep e development packs
 bedrockServer/*
 !bedrockServer/.gitkeep
-!bedrockServer/behavior_packs/
-bedrockServer/behavior_packs/*
-!bedrockServer/behavior_packs/.gitkeep
-!bedrockServer/resource_packs/
-bedrockServer/resource_packs/*
-!bedrockServer/resource_packs/.gitkeep
+!bedrockServer/development_behavior_packs/
+bedrockServer/development_behavior_packs/**
+!bedrockServer/development_resource_packs/
+bedrockServer/development_resource_packs/**
 
 # Docker
 docker-compose.override.yml
