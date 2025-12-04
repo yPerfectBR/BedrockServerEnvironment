@@ -10,21 +10,6 @@
 
 - `start.sh` / `start.ps1` - Inicia todos os serviços Docker
 
-### Console do Servidor
-
-- `bedrock-cmd.sh` / `bedrock-cmd.ps1` - Envia comandos ao servidor Bedrock
-
-**Uso:**
-```bash
-# Linux/Mac
-./bedrock-cmd.sh "list"
-./bedrock-cmd.sh "op yPerfectBR"
-
-# Windows
-.\bedrock-cmd.ps1 "list"
-.\bedrock-cmd.ps1 "op yPerfectBR"
-```
-
 ## Console Interativo
 
 Para acessar o console interativo do servidor:
