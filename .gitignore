@@ -1,0 +1,87 @@
+# Dependências
+node_modules/
+**/node_modules/
+package-lock.json
+**/package-lock.json
+
+# Build e compilação
+dist/
+build/
+*.tsbuildinfo
+
+# Ambiente e configuração
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Testes e cobertura
+coverage/
+.nyc_output/
+.vitest/
+*.lcov
+
+# Bedrock Server - Arquivos gerados e binários
+bedrockServer/bedrock_server-*
+bedrockServer/worlds/
+bedrockServer/backups/
+bedrockServer/logs/
+bedrockServer/cache/
+bedrockServer/premium_cache/
+bedrockServer/minecraftpe/
+bedrockServer/treatments/
+bedrockServer/world_templates/
+bedrockServer/development_behavior_packs/
+bedrockServer/development_resource_packs/
+bedrockServer/development_skin_packs/
+
+# Bedrock Server - Packs padrão (muito grandes, baixados automaticamente)
+bedrockServer/behavior_packs/vanilla/
+bedrockServer/behavior_packs/vanilla_*/
+bedrockServer/behavior_packs/chemistry/
+bedrockServer/behavior_packs/chemistry_*/
+bedrockServer/behavior_packs/editor/
+bedrockServer/behavior_packs/experimental_*/
+bedrockServer/behavior_packs/server_*/
+bedrockServer/resource_packs/vanilla/
+bedrockServer/resource_packs/chemistry/
+bedrockServer/resource_packs/editor/
+
+# Bedrock Server - Arquivos grandes e desnecessários
+bedrockServer/bedrock_server_how_to.html
+bedrockServer/release-notes.txt
+bedrockServer/Dedicated_Server.txt
+
+# Docker
+docker-compose.override.yml
+
+# Temporários
+*.tmp
+*.temp
+.cache/
+tmp/
+temp/

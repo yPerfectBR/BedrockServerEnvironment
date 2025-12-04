@@ -1,0 +1,51 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Dependências
+node_modules
+package-lock.json
+
+# Build (será gerado no container)
+dist
+build
+
+# Ambiente
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs
+
+# Testes
+coverage
+.nyc_output
+.vitest
+tests
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+
+# Documentação (não precisa no container)
+*.md
+!README.md
+
+# Bedrock Server - Arquivos grandes e desnecessários no build
+bedrockServer/bedrock_server-*
+bedrockServer/bedrock_server_how_to.html
+bedrockServer/release-notes.txt
+bedrockServer/Dedicated_Server.txt
+bedrockServer/worlds
+bedrockServer/backups
+bedrockServer/logs
+bedrockServer/cache
+bedrockServer/premium_cache
+
+# Development (não precisa no container)
+development

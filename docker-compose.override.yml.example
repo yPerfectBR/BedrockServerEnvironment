@@ -1,0 +1,14 @@
+# Arquivo de exemplo para override de configurações locais
+# Copie para docker-compose.override.yml para usar (não será commitado)
+
+services:
+  # Exemplo: Alterar porta da API apenas localmente
+  # api:
+  #   ports:
+  #     - "3001:3000"
+
+  # Exemplo: Adicionar volume para desenvolvimento
+  # api:
+  #   volumes:
+  #     - ./server:/app
+

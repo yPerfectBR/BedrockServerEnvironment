@@ -1,0 +1,122 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: bedrock-mongodb
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-admin123}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE:-bedrock_db}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - bedrock-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: bedrock-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      MONGODB_URI: mongodb://${MONGODB_USERNAME:-admin}:${MONGODB_PASSWORD:-admin123}@mongodb:27017/${MONGODB_DATABASE:-bedrock_db}?authSource=admin
+      PORT: 3000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - bedrock-network
+    volumes:
+      - ./server/src:/app/src
+      - ./server/tsconfig.json:/app/tsconfig.json
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  bedrock-server:
+    image: itzg/minecraft-bedrock-server:latest
+    container_name: bedrock-server
+    restart: unless-stopped
+    ports:
+      - "${BEDROCK_PORT_IPV4:-19132}:19132/udp"
+      - "${BEDROCK_PORT_IPV6:-19133}:19133/udp"
+    environment:
+      EULA: ${BEDROCK_EULA}
+      SERVER_NAME: ${BEDROCK_SERVER_NAME}
+      GAMEMODE: ${BEDROCK_GAMEMODE}
+      FORCE_GAMEMODE: ${BEDROCK_FORCE_GAMEMODE}
+      DIFFICULTY: ${BEDROCK_DIFFICULTY}
+      ALLOW_CHEATS: ${BEDROCK_ALLOW_CHEATS}
+      MAX_PLAYERS: ${BEDROCK_MAX_PLAYERS}
+      ONLINE_MODE: ${BEDROCK_ONLINE_MODE}
+      WHITE_LIST: ${BEDROCK_WHITE_LIST}
+      SERVER_PORT: ${BEDROCK_SERVER_PORT}
+      SERVER_PORT_V6: ${BEDROCK_SERVER_PORT_V6}
+      VIEW_DISTANCE: ${BEDROCK_VIEW_DISTANCE}
+      TICK_DISTANCE: ${BEDROCK_TICK_DISTANCE}
+      PLAYER_IDLE_TIMEOUT: ${BEDROCK_PLAYER_IDLE_TIMEOUT}
+      MAX_THREADS: ${BEDROCK_MAX_THREADS}
+      LEVEL_NAME: ${BEDROCK_LEVEL_NAME}
+      LEVEL_SEED: ${BEDROCK_LEVEL_SEED}
+      DEFAULT_PLAYER_PERMISSION_LEVEL: ${BEDROCK_DEFAULT_PLAYER_PERMISSION_LEVEL}
+      TEXTUREPACK_REQUIRED: ${BEDROCK_TEXTUREPACK_REQUIRED}
+      CONTENT_LOG_FILE_ENABLED: ${BEDROCK_CONTENT_LOG_FILE_ENABLED}
+      CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: ${BEDROCK_CONTENT_LOG_CONSOLE_OUTPUT_ENABLED}
+      CONTENT_LOG_LEVEL: ${BEDROCK_CONTENT_LOG_LEVEL}
+      COMPRESSION_THRESHOLD: ${BEDROCK_COMPRESSION_THRESHOLD}
+      COMPRESSION_ALGORITHM: ${BEDROCK_COMPRESSION_ALGORITHM}
+      SERVER_AUTHORITATIVE_MOVEMENT: ${BEDROCK_SERVER_AUTHORITATIVE_MOVEMENT}
+      SERVER_AUTHORITATIVE_MOVEMENT_STRICT: ${BEDROCK_SERVER_AUTHORITATIVE_MOVEMENT_STRICT}
+      SERVER_AUTHORITATIVE_DISMOUNT_STRICT: ${BEDROCK_SERVER_AUTHORITATIVE_DISMOUNT_STRICT}
+      SERVER_AUTHORITATIVE_ENTITY_INTERACTIONS_STRICT: ${BEDROCK_SERVER_AUTHORITATIVE_ENTITY_INTERACTIONS_STRICT}
+      PLAYER_POSITION_ACCEPTANCE_THRESHOLD: ${BEDROCK_PLAYER_POSITION_ACCEPTANCE_THRESHOLD}
+      PLAYER_MOVEMENT_ACTION_DIRECTION_THRESHOLD: ${BEDROCK_PLAYER_MOVEMENT_ACTION_DIRECTION_THRESHOLD}
+      PLAYER_MOVEMENT_DURATION_THRESHOLD_IN_MS: ${BEDROCK_PLAYER_MOVEMENT_DURATION_THRESHOLD}
+      PLAYER_MOVEMENT_SCORE_THRESHOLD: ${BEDROCK_PLAYER_MOVEMENT_SCORE_THRESHOLD}
+      PLAYER_MOVEMENT_DISTANCE_THRESHOLD: ${BEDROCK_PLAYER_MOVEMENT_DISTANCE_THRESHOLD}
+      CORRECT_PLAYER_MOVEMENT: ${BEDROCK_CORRECT_PLAYER_MOVEMENT}
+      SERVER_AUTHORITATIVE_BLOCK_BREAKING: ${BEDROCK_SERVER_AUTHORITATIVE_BLOCK_BREAKING}
+      SERVER_AUTHORITATIVE_BLOCK_BREAKING_PICK_RANGE_SCALAR: ${BEDROCK_SERVER_AUTHORITATIVE_BLOCK_BREAKING_PICK_RANGE_SCALAR}
+      CHAT_RESTRICTION: ${BEDROCK_CHAT_RESTRICTION}
+      DISABLE_PLAYER_INTERACTION: ${BEDROCK_DISABLE_PLAYER_INTERACTION}
+      CLIENT_SIDE_CHUNK_GENERATION_ENABLED: ${BEDROCK_CLIENT_SIDE_CHUNK_GENERATION_ENABLED}
+      SERVER_BUILD_RADIUS_RATIO: ${BEDROCK_SERVER_BUILD_RADIUS_RATIO}
+      BLOCK_NETWORK_IDS_ARE_HASHES: ${BEDROCK_BLOCK_NETWORK_IDS_ARE_HASHES}
+      DISABLE_PERSONA: ${BEDROCK_DISABLE_PERSONA}
+      DISABLE_CUSTOM_SKINS: ${BEDROCK_DISABLE_CUSTOM_SKINS}
+      ALLOW_OUTBOUND_SCRIPT_DEBUGGING: ${BEDROCK_ALLOW_OUTBOUND_SCRIPT_DEBUGGING}
+      ALLOW_INBOUND_SCRIPT_DEBUGGING: ${BEDROCK_ALLOW_INBOUND_SCRIPT_DEBUGGING}
+      SCRIPT_DEBUGGER_AUTO_ATTACH: ${BEDROCK_SCRIPT_DEBUGGER_AUTO_ATTACH}
+    volumes:
+      - ./bedrockServer:/data
+    networks:
+      - bedrock-network
+    depends_on:
+      api:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+
+volumes:
+  mongodb_data:
+  mongodb_config:
+
+networks:
+  bedrock-network:
+    driver: bridge
+

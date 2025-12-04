@@ -1,0 +1,35 @@
+# Configurações de atributos Git
+
+# Arquivos de texto devem usar LF (Unix)
+* text=auto eol=lf
+
+# Arquivos específicos do Windows
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Arquivos binários
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.brarchive binary
+*.nbt binary
+*.mcstructure binary
+*.dat binary
+bedrockServer/bedrock_server-* binary
+
+# Arquivos de configuração
+*.json text
+*.yml text
+*.yaml text
+*.toml text
+*.properties text
+
+# Código fonte
+*.ts text
+*.js text
+*.tsx text
+*.jsx text
+
