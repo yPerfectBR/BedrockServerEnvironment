@@ -1,10 +1,22 @@
 # Script para preparar o ambiente e instalar todas as dependencias do projeto.
 
 param(
-    [switch]$Elevated
+    [switch]$Elevated,
+    [string]$ProjectRoot
 )
 
+if (-not $ProjectRoot) {
+    if ($PSScriptRoot) {
+        $ProjectRoot = $PSScriptRoot
+    } else {
+        $ProjectRoot = (Get-Location).Path
+    }
+}
+
+Set-Location $ProjectRoot
+
 Write-Host "Preparando ambiente do Bedrock Server Project..." -ForegroundColor Cyan
+Write-Host "Diretorio do projeto: $ProjectRoot" -ForegroundColor DarkGray
 Write-Host ""
 
 $count = 0
@@ -67,13 +79,18 @@ function Request-Elevation {
         "-NoProfile",
         "-ExecutionPolicy", "Bypass",
         "-File", "`"$scriptPath`"",
-        "-Elevated"
+        "-Elevated",
+        "-ProjectRoot", "`"$ProjectRoot`""
     )
 
     Write-Host "A nova janela elevada continuara o instalador completo, incluindo pacotes npm." -ForegroundColor Yellow
+    Write-Host "Aguarde a janela elevada terminar antes de rodar .\configure.ps1 ou .\start.ps1." -ForegroundColor Yellow
 
     try {
-        Start-Process -FilePath "powershell.exe" -ArgumentList $argumentList -Verb RunAs
+        $process = Start-Process -FilePath "powershell.exe" -ArgumentList $argumentList -Verb RunAs -WorkingDirectory $ProjectRoot -PassThru
+        Write-Host "Aguardando a janela elevada finalizar..." -ForegroundColor Cyan
+        $process.WaitForExit()
+        Write-Host "Janela elevada finalizada." -ForegroundColor Green
         exit 0
     } catch {
         Write-Host "Permissao de Administrador cancelada ou bloqueada." -ForegroundColor Red
@@ -221,6 +238,15 @@ function Install-Packages {
     }
 }
 
+function Assert-ProjectRoot {
+    if (-not (Test-Path "docker-compose.yml")) {
+        Write-Host "Diretorio atual nao parece ser a raiz do projeto: $(Get-Location)" -ForegroundColor Red
+        Write-Host "Rode o script a partir da pasta BedrockServerEnvironment." -ForegroundColor Yellow
+        Stop-Installer 1
+    }
+}
+
+Assert-ProjectRoot
 Ensure-Node
 Ensure-Docker
 
@@ -242,6 +268,11 @@ if (Test-Path "development") {
 
 if (Test-Path "script-tools") {
     Install-Packages "script-tools"
+}
+
+if ($count -eq 0) {
+    Write-Host "Nenhum package.json foi processado. Verifique se o script esta rodando na raiz do projeto." -ForegroundColor Red
+    Stop-Installer 1
 }
 
 Write-Host "Instalacao concluida!" -ForegroundColor Green

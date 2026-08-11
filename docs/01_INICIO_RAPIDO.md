@@ -46,7 +46,7 @@ No Linux, o instalador cobre as principais famílias de distro:
 - Fedora: `dnf`
 - Arch/Manjaro/EndeavourOS: `pacman`
 
-No Windows, o instalador tenta usar `winget` e, se não existir, Chocolatey. A instalação do Docker Desktop pode demorar alguns minutos, pedir permissão de Administrador e reabrir o instalador em uma nova janela. Essa janela continua o fluxo completo, incluindo pacotes npm, e espera uma tecla antes de fechar. Depois de instalar Docker Desktop ou Node.js pela primeira vez, talvez seja necessário abrir um novo terminal.
+No Windows, o instalador tenta usar `winget` e, se não existir, Chocolatey. A instalação do Docker Desktop pode demorar alguns minutos, pedir permissão de Administrador e reabrir o instalador em uma nova janela na raiz do projeto. Essa janela continua o fluxo completo, incluindo pacotes npm, e espera uma tecla antes de fechar. A janela original aguarda esse processo terminar. Depois de instalar Docker Desktop ou Node.js pela primeira vez, talvez seja necessário abrir um novo terminal.
 
 Quando o Docker é instalado pelo script, ele não é configurado para iniciar automaticamente com o sistema.
 

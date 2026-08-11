@@ -8,7 +8,7 @@
 
 - `install-all.sh` / `install-all.ps1` - Prepara o ambiente e instala todas as dependências do projeto
 
-O instalador verifica Node.js/npm e Docker antes de instalar os pacotes npm. No Linux, usa `apt`, `dnf` ou `pacman` para cobrir Ubuntu/Debian, Fedora e Arch. No Windows, tenta instalar Node.js LTS e Docker Desktop com `winget` ou Chocolatey; Docker Desktop pode pedir Administrador e reabrir o instalador em uma nova janela. Essa janela continua o fluxo completo, incluindo pacotes npm, e espera uma tecla antes de fechar. Quando o Docker é instalado pelo script, ele não é configurado para iniciar automaticamente com o sistema.
+O instalador verifica Node.js/npm e Docker antes de instalar os pacotes npm. No Linux, usa `apt`, `dnf` ou `pacman` para cobrir Ubuntu/Debian, Fedora e Arch. No Windows, tenta instalar Node.js LTS e Docker Desktop com `winget` ou Chocolatey; Docker Desktop pode pedir Administrador e reabrir o instalador em uma nova janela na raiz do projeto. Essa janela continua o fluxo completo, incluindo pacotes npm, e espera uma tecla antes de fechar. A janela original aguarda esse processo terminar. Quando o Docker é instalado pelo script, ele não é configurado para iniciar automaticamente com o sistema.
 
 Ele também processa `script-tools/`, que contém as ferramentas de configuração do ambiente.
 
