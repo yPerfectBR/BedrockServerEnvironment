@@ -49,6 +49,10 @@ coverage/
 # Bedrock Server - ignorar saídas geradas pelo servidor/CLI
 bedrockServer/*
 !bedrockServer/.gitkeep
+!bedrockServer/worlds/
+bedrockServer/worlds/*
+!bedrockServer/worlds/world-bases/
+!bedrockServer/worlds/world-bases/**
 
 # Docker
 docker-compose.override.yml
