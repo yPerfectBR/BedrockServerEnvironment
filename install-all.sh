@@ -125,7 +125,7 @@ install_docker_linux() {
     fi
 
     if command_exists systemctl; then
-        run_as_root systemctl enable docker > /dev/null 2>&1 || true
+        echo "ℹ️  Iniciando Docker para esta sessão, sem habilitar inicialização automática com o sistema."
         run_as_root systemctl start docker > /dev/null 2>&1 || true
     fi
 

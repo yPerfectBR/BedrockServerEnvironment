@@ -43,6 +43,16 @@ As principais opções são:
 - `BEDROCK_SERVER_PORT` - Porta IPv4 usada pelo Bedrock Server dentro do container
 - `BEDROCK_SERVER_PORT_V6` - Porta IPv6 usada pelo Bedrock Server dentro do container
 
+### Recursos dos Containers
+
+O Docker Compose usa limites de CPU/RAM definidos no `.env`:
+
+- `BEDROCK_CPUS=2` e `BEDROCK_MEMORY=3g`
+- `API_CPUS=0.5` e `API_MEMORY=512m`
+- `MONGODB_CPUS=0.75` e `MONGODB_MEMORY=1g`
+
+Use o configurador para alterar esses valores sem editar o arquivo manualmente.
+
 ### Addon Base
 
 O addon base fica nas pastas:
@@ -97,6 +107,10 @@ Use o configurador para alterar as portas UDP do Bedrock Server:
 ```
 
 A opção de portas atualiza `BEDROCK_PORT_IPV4`, `BEDROCK_PORT_IPV6`, `BEDROCK_SERVER_PORT` e `BEDROCK_SERVER_PORT_V6` no `.env`.
+
+### CPU/RAM dos Containers
+
+Use **Configurar CPU/RAM dos containers** no configurador para definir quanto cada serviço pode consumir. Os valores são salvos no `.env` e aplicados na próxima recriação/inicialização dos containers.
 
 ## Configuração do Servidor Bedrock
 

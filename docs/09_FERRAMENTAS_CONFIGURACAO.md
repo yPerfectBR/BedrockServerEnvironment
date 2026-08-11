@@ -44,6 +44,18 @@ Os scripts funcionam em Windows e Linux porque a lógica principal usa APIs nati
 
 O start da raiz também usa essa sincronização: ele compila o addon em `development/`, copia os scripts gerados para o Behavior Pack do servidor e só depois inicia os containers.
 
+## Configurar CPU/RAM dos Containers
+
+Essa opção altera os limites usados pelo Docker Compose e salva tudo no `.env`.
+
+Padrões:
+
+- Bedrock Server: `2` CPUs e `3g` de RAM
+- API: `0.5` CPU e `512m` de RAM
+- MongoDB: `0.75` CPU e `1g` de RAM
+
+Depois de mudar os valores, reinicie os containers com `start` para aplicar.
+
 ## Docker: Terminal/Logs
 
 Essa opção usa o Docker Compose do projeto para tarefas rápidas de diagnóstico:

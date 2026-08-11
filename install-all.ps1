@@ -1,9 +1,34 @@
 # Script para preparar o ambiente e instalar todas as dependencias do projeto.
 
+param(
+    [switch]$Elevated
+)
+
 Write-Host "Preparando ambiente do Bedrock Server Project..." -ForegroundColor Cyan
 Write-Host ""
 
 $count = 0
+
+function Pause-IfElevated {
+    if ($Elevated) {
+        Write-Host ""
+        Write-Host "Pressione qualquer tecla para sair..." -ForegroundColor Yellow
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    }
+}
+
+function Stop-Installer {
+    param([int]$Code = 0)
+
+    Pause-IfElevated
+    exit $Code
+}
+
+trap {
+    Write-Host ""
+    Write-Host "Erro inesperado: $($_.Exception.Message)" -ForegroundColor Red
+    Stop-Installer 1
+}
 
 function Test-Command {
     param([string]$Name)
@@ -30,7 +55,7 @@ function Request-Elevation {
 
     if ($answer -and $answer.Trim().ToLower() -notin @("s", "sim", "y", "yes")) {
         Write-Host "Instalacao interrompida. Abra o PowerShell como Administrador e rode .\install-all.ps1 novamente." -ForegroundColor Yellow
-        exit 1
+        Stop-Installer 1
     }
 
     $scriptPath = $PSCommandPath
@@ -41,11 +66,20 @@ function Request-Elevation {
     $argumentList = @(
         "-NoProfile",
         "-ExecutionPolicy", "Bypass",
-        "-File", "`"$scriptPath`""
+        "-File", "`"$scriptPath`"",
+        "-Elevated"
     )
 
-    Start-Process -FilePath "powershell.exe" -ArgumentList $argumentList -Verb RunAs
-    exit 0
+    Write-Host "A nova janela elevada continuara o instalador completo, incluindo pacotes npm." -ForegroundColor Yellow
+
+    try {
+        Start-Process -FilePath "powershell.exe" -ArgumentList $argumentList -Verb RunAs
+        exit 0
+    } catch {
+        Write-Host "Permissao de Administrador cancelada ou bloqueada." -ForegroundColor Red
+        Write-Host "Abra o PowerShell como Administrador e rode .\install-all.ps1 novamente." -ForegroundColor Yellow
+        Stop-Installer 1
+    }
 }
 
 function Invoke-InstallCommand {
@@ -115,13 +149,13 @@ function Ensure-Node {
     if (-not $installed) {
         Write-Host "Nao foi possivel instalar Node.js automaticamente." -ForegroundColor Red
         Write-Host "Instale Node.js LTS manualmente e rode este script novamente." -ForegroundColor Yellow
-        exit 1
+        Stop-Installer 1
     }
 
     if (-not ((Test-Command "node") -and (Test-Command "npm"))) {
         Write-Host "Node.js foi instalado, mas node/npm ainda nao estao no PATH desta sessao." -ForegroundColor Yellow
         Write-Host "Abra um novo PowerShell e rode este script novamente." -ForegroundColor Yellow
-        exit 1
+        Stop-Installer 1
     }
 
     Write-Host "Node.js instalado." -ForegroundColor Green
@@ -144,10 +178,11 @@ function Ensure-Docker {
         if (-not $installed) {
             Write-Host "Nao foi possivel instalar Docker automaticamente." -ForegroundColor Red
             Write-Host "Instale Docker Desktop manualmente e rode este script novamente." -ForegroundColor Yellow
-            exit 1
+            Stop-Installer 1
         }
 
         Write-Host "Docker Desktop instalado." -ForegroundColor Green
+        Write-Host "Este script nao configura Docker Desktop para iniciar automaticamente com o Windows." -ForegroundColor Yellow
         Write-Host "Se essa foi a primeira instalacao do Docker Desktop, abra o Docker Desktop pelo menu iniciar e aguarde ele terminar a configuracao inicial." -ForegroundColor Yellow
         Write-Host "Pode ser necessario reiniciar o computador ou abrir um novo PowerShell para atualizar o PATH." -ForegroundColor Yellow
     }
@@ -160,7 +195,7 @@ function Ensure-Docker {
         }
     } else {
         Write-Host "Abra um novo PowerShell para atualizar o PATH do Docker, depois rode este script novamente." -ForegroundColor Yellow
-        exit 1
+        Stop-Installer 1
     }
 }
 
@@ -177,7 +212,7 @@ function Install-Packages {
                 $script:count++
             } else {
                 Write-Host "$Dir - Erro ao instalar dependencias" -ForegroundColor Red
-                exit $LASTEXITCODE
+                Stop-Installer $LASTEXITCODE
             }
         } finally {
             Pop-Location
@@ -216,3 +251,5 @@ Write-Host "Proximos passos:" -ForegroundColor Yellow
 Write-Host "   1. Revise o arquivo .env se precisar mudar portas, mundo ou credenciais" -ForegroundColor Gray
 Write-Host "   2. Execute .\configure.ps1 para ajustar mundo/addon" -ForegroundColor Gray
 Write-Host "   3. Execute .\start.ps1 para iniciar os servicos" -ForegroundColor Gray
+
+Pause-IfElevated

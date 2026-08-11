@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     ports:
       - "${MONGODB_PORT:-27017}:27017"
+    cpus: ${MONGODB_CPUS:-0.75}
+    mem_limit: ${MONGODB_MEMORY:-1g}
     environment:
       GLIBC_TUNABLES: ${MONGODB_GLIBC_TUNABLES:-glibc.pthread.rseq=1}
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME:-admin}
@@ -30,6 +32,8 @@ services:
     restart: unless-stopped
     ports:
       - "${API_PORT:-3000}:3000"
+    cpus: ${API_CPUS:-0.5}
+    mem_limit: ${API_MEMORY:-512m}
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       MONGODB_URI: mongodb://${MONGODB_USERNAME:-admin}:${MONGODB_PASSWORD:-admin123}@mongodb:27017/${MONGODB_DATABASE:-bedrock_db}?authSource=admin
@@ -56,6 +60,8 @@ services:
     ports:
       - "${BEDROCK_PORT_IPV4:-19132}:19132/udp"
       - "${BEDROCK_PORT_IPV6:-19133}:19133/udp"
+    cpus: ${BEDROCK_CPUS:-2}
+    mem_limit: ${BEDROCK_MEMORY:-3g}
     environment:
       EULA: ${BEDROCK_EULA}
       SERVER_NAME: ${BEDROCK_SERVER_NAME}
