@@ -8,7 +8,7 @@
 
 - `install-all.sh` / `install-all.ps1` - Prepara o ambiente e instala todas as dependências do projeto
 
-O instalador verifica Node.js/npm e Docker antes de instalar os pacotes npm. No Linux, usa `apt`, `dnf` ou `pacman` para cobrir Ubuntu/Debian, Fedora e Arch. No Windows, tenta instalar Node.js LTS e Docker Desktop com `winget` ou Chocolatey.
+O instalador verifica Node.js/npm e Docker antes de instalar os pacotes npm. No Linux, usa `apt`, `dnf` ou `pacman` para cobrir Ubuntu/Debian, Fedora e Arch. No Windows, tenta instalar Node.js LTS e Docker Desktop com `winget` ou Chocolatey; Docker Desktop pode pedir Administrador, demorar alguns minutos e exigir abertura manual após instalar.
 
 Ele também processa `script-tools/`, que contém as ferramentas de configuração do ambiente.
 
@@ -20,7 +20,7 @@ Antes do Docker subir, o start executa o build do addon em `development/` e sinc
 
 ### Configuração
 
-- `configure.sh` / `configure.ps1` - Abre o menu de configuração de mundos, addon base e UUIDs
+- `configure.sh` / `configure.ps1` - Abre o menu de configuração de mundos, addon base, UUIDs, portas e ferramentas Docker
 
 Antes de rodar `configure.sh` ou `configure.ps1`, execute `install-all` pelo menos uma vez. Se as dependências de `script-tools/` não tiverem sido instaladas, o script avisa para rodar o instalador.
 
@@ -35,6 +35,7 @@ Menu:
 - **Configurar addon base**: renomeia o addon em `development/` e pode regenerar todos os UUIDs mantendo BP/RP vinculados.
 - **Configurar mundo base/padrão**: cria mundo a partir de `bedrockServer/worlds/world-bases/` ou seleciona um mundo existente como padrão.
 - **Configurar portas do Bedrock Server**: altera as portas UDP IPv4/IPv6 no `.env`.
+- **Docker: terminal/logs**: abre um shell em um container ou mostra logs de um ou vários serviços.
 
 Ao trocar o mundo padrão, a ferramenta atualiza o `.env` e grava `world_behavior_packs.json` e `world_resource_packs.json` no mundo com base no addon em `development/`.
 

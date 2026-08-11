@@ -1,6 +1,7 @@
 const { configureAddonBase } = require("./addon-base");
 const { configureBedrockPorts } = require("./bedrock-ports");
 const { configureWorldBase } = require("./world-base");
+const { openDockerTools } = require("./docker-tools");
 const { createPrompt } = require("./prompt");
 
 async function main() {
@@ -12,6 +13,7 @@ async function main() {
         { label: "Configurar addon base", value: "addon" },
         { label: "Configurar mundo base/padrao", value: "world" },
         { label: "Configurar portas do Bedrock Server", value: "ports" },
+        { label: "Docker: terminal/logs", value: "docker" },
         { label: "Sair", value: "exit" },
       ]);
 
@@ -29,6 +31,10 @@ async function main() {
 
       if (action === "ports") {
         await configureBedrockPorts(prompt);
+      }
+
+      if (action === "docker") {
+        await openDockerTools(prompt);
       }
     }
   } finally {

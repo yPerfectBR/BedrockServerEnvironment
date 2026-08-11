@@ -10,6 +10,67 @@ function Test-Command {
     return $null -ne (Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
+function Test-IsAdmin {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Request-Elevation {
+    param([string]$Reason)
+
+    if (Test-IsAdmin) {
+        return
+    }
+
+    Write-Host ""
+    Write-Host $Reason -ForegroundColor Yellow
+    Write-Host "Para evitar travas ou instalacao incompleta, o instalador sera reaberto como Administrador." -ForegroundColor Yellow
+    $answer = Read-Host "Deseja continuar e abrir a janela de permissao do Windows? [S/n]"
+
+    if ($answer -and $answer.Trim().ToLower() -notin @("s", "sim", "y", "yes")) {
+        Write-Host "Instalacao interrompida. Abra o PowerShell como Administrador e rode .\install-all.ps1 novamente." -ForegroundColor Yellow
+        exit 1
+    }
+
+    $scriptPath = $PSCommandPath
+    if (-not $scriptPath) {
+        $scriptPath = $MyInvocation.MyCommand.Path
+    }
+
+    $argumentList = @(
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", "`"$scriptPath`""
+    )
+
+    Start-Process -FilePath "powershell.exe" -ArgumentList $argumentList -Verb RunAs
+    exit 0
+}
+
+function Invoke-InstallCommand {
+    param(
+        [string]$FilePath,
+        [string[]]$Arguments,
+        [string]$Name
+    )
+
+    Write-Host "Isso pode levar alguns minutos. Se o Windows pedir permissao, aceite para continuar." -ForegroundColor DarkYellow
+
+    $process = Start-Process -FilePath $FilePath -ArgumentList $Arguments -NoNewWindow -PassThru
+    $spinner = @("|", "/", "-", "\")
+    $index = 0
+
+    while (-not $process.HasExited) {
+        Write-Host -NoNewline "`r$Name em andamento... $($spinner[$index % $spinner.Length])"
+        Start-Sleep -Seconds 2
+        $index++
+    }
+
+    Write-Host "`r$Name finalizado.                      "
+    return $process.ExitCode -eq 0
+}
+
 function Install-WithWinget {
     param(
         [string]$Id,
@@ -17,8 +78,10 @@ function Install-WithWinget {
     )
 
     Write-Host "Instalando $Name com winget..." -ForegroundColor Yellow
-    winget install --id $Id --exact --accept-package-agreements --accept-source-agreements
-    return $LASTEXITCODE -eq 0
+    return Invoke-InstallCommand `
+        -FilePath "winget" `
+        -Arguments @("install", "--id", $Id, "--exact", "--accept-package-agreements", "--accept-source-agreements") `
+        -Name $Name
 }
 
 function Install-WithChocolatey {
@@ -28,8 +91,10 @@ function Install-WithChocolatey {
     )
 
     Write-Host "Instalando $Name com Chocolatey..." -ForegroundColor Yellow
-    choco install $Package -y
-    return $LASTEXITCODE -eq 0
+    return Invoke-InstallCommand `
+        -FilePath "choco" `
+        -Arguments @("install", $Package, "-y") `
+        -Name $Name
 }
 
 function Ensure-Node {
@@ -67,6 +132,7 @@ function Ensure-Docker {
         Write-Host "Docker ja esta instalado." -ForegroundColor Green
     } else {
         Write-Host "Docker nao encontrado. Instalando Docker Desktop..." -ForegroundColor Yellow
+        Request-Elevation "Docker Desktop normalmente precisa de permissao de Administrador para instalar servicos, WSL/Hyper-V e integracao de rede."
 
         $installed = $false
         if (Test-Command "winget") {
@@ -82,12 +148,15 @@ function Ensure-Docker {
         }
 
         Write-Host "Docker Desktop instalado." -ForegroundColor Green
+        Write-Host "Se essa foi a primeira instalacao do Docker Desktop, abra o Docker Desktop pelo menu iniciar e aguarde ele terminar a configuracao inicial." -ForegroundColor Yellow
+        Write-Host "Pode ser necessario reiniciar o computador ou abrir um novo PowerShell para atualizar o PATH." -ForegroundColor Yellow
     }
 
     if (Test-Command "docker") {
         docker compose version | Out-Null
         if ($LASTEXITCODE -ne 0) {
-            Write-Host "Docker Compose nao respondeu. Abra/inicie o Docker Desktop e rode novamente se necessario." -ForegroundColor Yellow
+            Write-Host "Docker Compose nao respondeu." -ForegroundColor Yellow
+            Write-Host "Abra/inicie o Docker Desktop, aguarde o status ficar Running e rode este script novamente se necessario." -ForegroundColor Yellow
         }
     } else {
         Write-Host "Abra um novo PowerShell para atualizar o PATH do Docker, depois rode este script novamente." -ForegroundColor Yellow

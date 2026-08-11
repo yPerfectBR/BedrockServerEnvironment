@@ -53,6 +53,14 @@ function createPrompt() {
     close() {
       rl.close();
     },
+
+    suspend() {
+      rl.pause();
+    },
+
+    resume() {
+      rl.resume();
+    },
   };
 }
 
@@ -108,6 +116,8 @@ function createBufferedPrompt() {
     },
 
     close() {},
+    suspend() {},
+    resume() {},
   };
 }
 

@@ -47,7 +47,7 @@ Ambiente Docker para servidor Minecraft Bedrock com API TypeScript, MongoDB e de
    ./install-all.sh
    ```
 
-   O instalador verifica Node.js/npm e Docker. No Linux ele tenta instalar automaticamente em distribuições baseadas em Ubuntu/Debian, Fedora e Arch. No Windows ele usa `winget` ou Chocolatey quando disponíveis.
+   O instalador verifica Node.js/npm e Docker. No Linux ele tenta instalar automaticamente em distribuições baseadas em Ubuntu/Debian, Fedora e Arch. No Windows ele usa `winget` ou Chocolatey quando disponíveis; para Docker Desktop, pode pedir permissão de Administrador e pode ser necessário abrir o Docker Desktop após instalar.
 
 3. **Configurar Addon e Mundo**
    Windows:
@@ -60,7 +60,7 @@ Ambiente Docker para servidor Minecraft Bedrock com API TypeScript, MongoDB e de
    ./configure.sh
    ```
 
-   O configurador usa `development/` como fonte do addon, sincroniza a saída para o `bedrockServer/`, cria mundos a partir de bases e ajusta o mundo padrão do Docker.
+   O configurador usa `development/` como fonte do addon, sincroniza a saída para o `bedrockServer/`, cria mundos a partir de bases, ajusta o mundo padrão do Docker e dá acesso a logs/terminais dos containers.
 
 4. **Iniciar Serviços**
    Windows:

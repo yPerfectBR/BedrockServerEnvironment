@@ -44,6 +44,17 @@ Os scripts funcionam em Windows e Linux porque a lógica principal usa APIs nati
 
 O start da raiz também usa essa sincronização: ele compila o addon em `development/`, copia os scripts gerados para o Behavior Pack do servidor e só depois inicia os containers.
 
+## Docker: Terminal/Logs
+
+Essa opção usa o Docker Compose do projeto para tarefas rápidas de diagnóstico:
+
+- abrir um shell `sh`, `bash` ou `mongosh` em um serviço;
+- selecionar um ou vários serviços para ver logs;
+- carregar uma quantidade de linhas recentes;
+- acompanhar logs em tempo real com `-f`.
+
+Para logs, escolha `0` para todos ou informe os números separados por vírgula, como `1,3`.
+
 ## Configurar Addon Base
 
 Essa opção define o nome do addon base nas pastas fonte:
