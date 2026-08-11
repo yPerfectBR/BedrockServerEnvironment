@@ -68,6 +68,8 @@ Ambiente Docker para servidor Minecraft Bedrock com API TypeScript, MongoDB e de
    .\start.ps1
    ```
 
+   No Windows, se o Docker Desktop estiver instalado mas parado, o script pode tentar iniciar o Docker antes de subir os containers.
+
    Linux/Mac:
    ```bash
    ./start.sh

@@ -80,6 +80,8 @@ Quando um mundo é criado ou escolhido como padrão, o configurador atualiza `wo
 .\start.ps1
 ```
 
+Se o Docker Desktop estiver instalado mas parado, o `start.ps1` pergunta se você quer tentar iniciar agora. Quando o serviço do Docker precisar de Administrador, ele abre uma janela elevada, a janela original aguarda ela terminar e depois continua.
+
 ### Linux/Mac
 ```bash
 ./start.sh

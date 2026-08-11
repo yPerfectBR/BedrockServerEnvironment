@@ -18,6 +18,8 @@ Ele também processa `script-tools/`, que contém as ferramentas de configuraç�
 
 Antes do Docker subir, o start executa o build do addon em `development/` e sincroniza o resultado para `bedrockServer/development_behavior_packs/` e `bedrockServer/development_resource_packs/`.
 
+No Windows, se o Docker Desktop estiver instalado mas parado, o `start.ps1` oferece iniciar o Docker. Se o serviço precisar de Administrador, ele abre uma janela elevada apenas para ligar o Docker e a janela original aguarda essa etapa antes de continuar.
+
 ### Configuração
 
 - `configure.sh` / `configure.ps1` - Abre o menu de configuração de mundos, addon base, UUIDs, portas e ferramentas Docker
