@@ -1,17 +1,26 @@
 # 🚀 Início Rápido
 
+[Voltar ao índice](00_INDICE.md)
+
 ## 1. Configuração Inicial
 
-```bash
-# Copiar arquivo de configuração
-cp env.example .env
+Editar configurações é opcional, porque os padrões já funcionam.
 
-# Editar configurações (opcional - os padrões já funcionam)
-# Windows: notepad .env
-# Linux/Mac: nano .env
+### Windows (PowerShell)
+```powershell
+notepad .env
 ```
 
+### Linux/Mac
+```bash
+nano .env
+```
+
+O projeto usa o arquivo `.env` da raiz. A variável `BEDROCK_LEVEL_NAME` define qual pasta em `bedrockServer/worlds/` será usada pelo container do Bedrock Server.
+
 ## 2. Instalar Dependências
+
+Os scripts abaixo também verificam Node.js/npm e Docker. Se algo estiver ausente, eles tentam instalar automaticamente antes de rodar `npm install` nos subprojetos.
 
 ### Windows (PowerShell)
 ```powershell
@@ -19,12 +28,50 @@ cp env.example .env
 ```
 
 ### Linux/Mac
+Execute esta linha apenas na primeira vez neste PC, depois de clonar o projeto:
+
 ```bash
-chmod +x install-all.sh
+chmod +x install-all.sh configure.sh start.sh
+```
+
+Depois instale:
+
+```bash
 ./install-all.sh
 ```
 
-## 3. Iniciar Serviços
+No Linux, o instalador cobre as principais famílias de distro:
+
+- Ubuntu/Debian e derivadas: `apt`
+- Fedora: `dnf`
+- Arch/Manjaro/EndeavourOS: `pacman`
+
+No Windows, o instalador tenta usar `winget` e, se não existir, Chocolatey. Depois de instalar Docker Desktop ou Node.js pela primeira vez, talvez seja necessário abrir um novo terminal.
+
+## 3. Configurar Addon e Mundo
+
+Depois de instalar as dependências, use o configurador da raiz:
+
+### Windows (PowerShell)
+```powershell
+.\configure.ps1
+```
+
+### Linux/Mac
+```bash
+./configure.sh
+```
+
+Com ele você pode:
+
+- renomear o addon base em `development/`;
+- regenerar UUIDs do addon mantendo a dependência entre Behavior Pack e Resource Pack;
+- criar um mundo novo a partir das bases em `bedrockServer/worlds/world-bases/`;
+- tornar um mundo existente o padrão do Docker.
+
+Quando um mundo é criado ou escolhido como padrão, o configurador atualiza `world_behavior_packs.json` e `world_resource_packs.json` no mundo com o UUID e version do addon em `development/`.
+
+## 4. Iniciar Serviços
 
 ### Windows (PowerShell)
 ```powershell
@@ -33,35 +80,36 @@ chmod +x install-all.sh
 
 ### Linux/Mac
 ```bash
-chmod +x start.sh
 ./start.sh
 ```
 
+Antes de subir os containers, o script de start compila o addon em `development/` e sincroniza a saída para o `bedrockServer/`.
+
 ### Ou manualmente
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-## 4. Verificar Status
+## 5. Verificar Status
 
 ```bash
 # Ver todos os serviços
-docker-compose ps
+docker compose ps
 
 # Ver logs
-docker-compose logs -f
+docker compose logs -f
 
 # Ver logs de um serviço específico
-docker-compose logs -f bedrock-server
+docker compose logs -f bedrock-server
 ```
 
-## 5. Conectar ao Servidor
+## 6. Conectar ao Servidor
 
 - **IP**: `localhost` (ou seu IP local)
 - **Porta**: `19132` (UDP)
-- **Versão**: Use a versão mais recente do Minecraft Bedrock
+- **Versão**: Bedrock `1.26.40`
 
-## 6. Acessar API
+## 7. Acessar API
 
 - **URL**: http://localhost:3000
 - **Health Check**: http://localhost:3000/health
@@ -71,18 +119,17 @@ docker-compose logs -f bedrock-server
 
 ```bash
 # Parar serviços
-docker-compose down
+docker compose down
 
 # Reiniciar um serviço
-docker-compose restart bedrock-server
+docker compose restart bedrock-server
 
 # Ver logs em tempo real
-docker-compose logs -f bedrock-server
+docker compose logs -f bedrock-server
 ```
 
 ## ⚠️ Importante
 
 1. **EULA**: Certifique-se de que `BEDROCK_EULA=TRUE` no arquivo `.env`
 2. **Portas**: Abra as portas UDP 19132/19133 no firewall
-3. **Addons**: Coloque em `bedrockServer/behavior_packs/` ou `bedrockServer/resource_packs/`
-
+3. **Addon em desenvolvimento**: edite os packs em `development/behavior_packs/` e `development/resource_packs/`

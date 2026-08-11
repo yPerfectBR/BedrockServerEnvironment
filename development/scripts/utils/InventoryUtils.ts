@@ -27,16 +27,16 @@ export class InventoryUtils {
     }
 
     const inventory: IInventoryItem[] = [];
-    
+
     // Itera apenas pelos slots que têm itens
     for (let slot = 0; slot < container.size; slot++) {
       const item = container.getItem(slot);
-      
+
       if (item && item.typeId !== this.AIR_TYPE && item.amount > 0) {
         inventory.push({
           typeId: item.typeId,
           amount: item.amount,
-          slot: slot
+          slot: slot,
         });
       }
     }
@@ -90,4 +90,3 @@ export class InventoryUtils {
     }
   }
 }
-

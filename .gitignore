@@ -7,12 +7,13 @@ package-lock.json
 # Build e compilação
 dist/
 build/
+development/lib/
 *.tsbuildinfo
 
 # Ambiente e configuração
-.env
-.env.local
-.env.*.local
+#.env
+#.env.local
+#.env.*.local
 
 # Logs
 *.log
@@ -45,15 +46,9 @@ coverage/
 .vitest/
 *.lcov
 
-# Bedrock Server - Ignorar tudo exceto .gitkeep e development packs
+# Bedrock Server - ignorar saídas geradas pelo servidor/CLI
 bedrockServer/*
 !bedrockServer/.gitkeep
-!bedrockServer/development_behavior_packs/
-bedrockServer/development_behavior_packs/*
-!bedrockServer/development_behavior_packs/**
-!bedrockServer/development_resource_packs/
-bedrockServer/development_resource_packs/*
-!bedrockServer/development_resource_packs/**
 
 # Docker
 docker-compose.override.yml

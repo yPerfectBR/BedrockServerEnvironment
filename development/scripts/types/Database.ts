@@ -38,4 +38,3 @@ export interface ILoadResponse {
   mensagem?: string;
   erro?: string;
 }
-

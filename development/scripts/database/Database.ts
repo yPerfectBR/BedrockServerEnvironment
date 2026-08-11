@@ -10,8 +10,8 @@ export class Database {
   private readonly apiUrl: string;
 
   // Constantes para métodos HTTP
-  private static readonly HTTP_METHOD_POST = HttpRequestMethod.Post;
-  private static readonly HTTP_METHOD_GET = HttpRequestMethod.Get;
+  private static readonly HTTP_METHOD_POST = HttpRequestMethod.POST;
+  private static readonly HTTP_METHOD_GET = HttpRequestMethod.GET;
 
   /**
    * Cria uma nova instância do Database
@@ -44,7 +44,7 @@ export class Database {
     // Validação de cada item do inventário
     for (let i = 0; i < data.inventory.length; i++) {
       const item = data.inventory[i];
-      
+
       if (!item?.typeId || typeof item.typeId !== "string" || item.typeId.trim().length === 0) {
         return { valid: false, error: `Item no índice ${i}: typeId é obrigatório e deve ser uma string não vazia` };
       }
@@ -68,11 +68,11 @@ export class Database {
     const request = new HttpRequest(url);
     request.method = method;
     request.addHeader("Content-Type", "application/json");
-    
+
     if (body) {
       request.setBody(body);
     }
-    
+
     return request;
   }
 
@@ -110,7 +110,7 @@ export class Database {
       return {
         sucesso: false,
         erro: "INVALID_KEY",
-        mensagem: keyValidation.error
+        mensagem: keyValidation.error,
       };
     }
 
@@ -120,7 +120,7 @@ export class Database {
       return {
         sucesso: false,
         erro: "INVALID_DATA",
-        mensagem: dataValidation.error
+        mensagem: dataValidation.error,
       };
     }
 
@@ -133,7 +133,7 @@ export class Database {
         const responseData = this.parseResponse<ISaveResponse>(response);
         return {
           sucesso: true,
-          mensagem: responseData.mensagem || "Dados salvos com sucesso"
+          mensagem: responseData.mensagem || "Dados salvos com sucesso",
         };
       }
 
@@ -142,14 +142,14 @@ export class Database {
       return {
         sucesso: false,
         erro: errorData.erro || "UNKNOWN_ERROR",
-        mensagem: errorData.mensagem || `Erro ao salvar: Status ${response.status}`
+        mensagem: errorData.mensagem || `Erro ao salvar: Status ${response.status}`,
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       return {
         sucesso: false,
         erro: "NETWORK_ERROR",
-        mensagem: `Erro de rede: ${errorMessage}`
+        mensagem: `Erro de rede: ${errorMessage}`,
       };
     }
   }
@@ -166,7 +166,7 @@ export class Database {
       return {
         sucesso: false,
         erro: "INVALID_KEY",
-        mensagem: keyValidation.error
+        mensagem: keyValidation.error,
       };
     }
 
@@ -180,19 +180,19 @@ export class Database {
         return {
           sucesso: false,
           erro: "NOT_FOUND",
-          mensagem: "Dados não encontrados"
+          mensagem: "Dados não encontrados",
         };
       }
 
       // Resposta de sucesso
       if (response.status >= 200 && response.status < 300) {
         const responseData = this.parseResponse<{ sucesso: boolean; dados?: IPlayerData }>(response);
-        
+
         if (!responseData.sucesso || !responseData.dados) {
           return {
             sucesso: false,
             erro: "INVALID_RESPONSE",
-            mensagem: "Resposta inválida da API"
+            mensagem: "Resposta inválida da API",
           };
         }
 
@@ -202,13 +202,13 @@ export class Database {
           return {
             sucesso: false,
             erro: "INVALID_DATA",
-            mensagem: `Dados inválidos recebidos: ${validation.error}`
+            mensagem: `Dados inválidos recebidos: ${validation.error}`,
           };
         }
 
         return {
           sucesso: true,
-          dados: responseData.dados
+          dados: responseData.dados,
         };
       }
 
@@ -217,16 +217,15 @@ export class Database {
       return {
         sucesso: false,
         erro: errorData.erro || "UNKNOWN_ERROR",
-        mensagem: errorData.mensagem || `Erro ao carregar: Status ${response.status}`
+        mensagem: errorData.mensagem || `Erro ao carregar: Status ${response.status}`,
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
       return {
         sucesso: false,
         erro: "NETWORK_ERROR",
-        mensagem: `Erro de rede: ${errorMessage}`
+        mensagem: `Erro de rede: ${errorMessage}`,
       };
     }
   }
 }
-

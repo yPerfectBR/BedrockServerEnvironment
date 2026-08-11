@@ -1,5 +1,7 @@
 # 💻 Desenvolvimento
 
+[Voltar ao índice](00_INDICE.md)
+
 Este guia explica como desenvolver e testar o projeto em modo de desenvolvimento com hot-reload (watch mode).
 
 ## 🔄 Modo Watch (Hot-Reload)
@@ -10,7 +12,7 @@ O projeto suporta desenvolvimento em modo watch, onde as mudanças nos arquivos 
 
 - **API (server/)**: Mudanças nos arquivos TypeScript são detectadas automaticamente e o servidor é reiniciado
 - **Bedrock Server**: Arquivos em `bedrockServer/` são sincronizados automaticamente com o container
-- **Addons (development/)**: Use `npx just-scripts local-deploy --watch` para deploy automático
+- **Addons (development/)**: Use `npm run local-deploy` para deploy automático
 
 ---
 
@@ -143,12 +145,12 @@ cd development
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 # Modo watch - compila e envia automaticamente para o servidor
-npx just-scripts local-deploy --watch
+npm run local-deploy
 ```
 
-Agora, qualquer mudança nos arquivos TypeScript em `development/scripts/` será:
+Qualquer mudança nos arquivos TypeScript em `development/scripts/` será:
 1. Compilada automaticamente
-2. Enviada para `bedrockServer/behavior_packs/dataServer/`
+2. Enviada como saída gerada para o servidor Bedrock
 3. O servidor Bedrock detecta e recarrega o addon
 
 ### Estrutura de Arquivos do Addon
@@ -158,12 +160,46 @@ development/
 ├── scripts/
 │   ├── constants/     # Constantes
 │   ├── database/      # Classes Database
+│   ├── events/        # Registro e roteamento de eventos Bedrock
+│   ├── services/      # Regras de negócio do addon
 │   ├── types/         # Tipos TypeScript
 │   ├── utils/         # Utilitários
-│   └── main.ts        # Arquivo principal
+│   └── main.ts        # Bootstrap do addon
 ├── behavior_packs/    # Packs compilados
+├── resource_packs/    # Resource packs
 └── package.json
 ```
+
+O `main.ts` deve ficar pequeno e apenas registrar módulos. Para novas interações, prefira criar arquivos em `scripts/events/` e mover lógica reutilizável para `scripts/services/`.
+
+### Versões do Addon
+
+Compatibilidade do addon:
+
+- `@minecraft/server` `^2.9.0`
+- `@minecraft/server-ui` `^2.1.0`
+- `@minecraft/server-net` `^1.0.0-beta.1.26.40-stable`
+- `@minecraft/vanilla-data` `^1.26.40`
+
+No `@minecraft/server-net`, os métodos HTTP usam os nomes maiúsculos do enum, por exemplo `HttpRequestMethod.POST` e `HttpRequestMethod.GET`.
+
+### Configurador do Ambiente
+
+Na raiz do projeto:
+
+Linux/Mac:
+
+```bash
+./configure.sh
+```
+
+Windows:
+
+```powershell
+.\configure.ps1
+```
+
+Use esse menu para configurar o addon base, regenerar UUIDs, trocar o mundo padrão e criar mundo a partir de base. Ele usa `development/` como fonte do addon e mantém os manifests, `.env`, `levelname.txt` e arquivos `world_*_packs.json` sincronizados.
 
 ---
 
@@ -345,4 +381,3 @@ docker compose up -d
 - [Criar Novo Tipo de Dados](07_CRIAR_NOVO_TIPO_DADOS.md) - Guia completo
 - [API Documentation](03_API.md) - Documentação da API
 - [Utilidades](05_UTILIDADES.md) - Scripts e ferramentas
-

@@ -16,4 +16,3 @@ export const Messages = {
   // Mensagens de erro
   INVENTORY_ERROR: "§cErro: Não foi possível acessar o inventário",
 } as const;
-

@@ -1,9 +1,9 @@
 {
   "format_version": 2,
   "header": {
-    "name": "dataServer",
+    "name": "teste",
     "description": "",
-    "uuid": "183b08af-a0e1-4819-afba-5ca7ef04f58e",
+    "uuid": "60e479a6-f2c4-4996-8e47-761d6bdf1e6b",
     "version": [
       1,
       0,
@@ -19,7 +19,7 @@
     {
       "description": "My Resource Pack",
       "type": "resources",
-      "uuid": "86fa66a2-313c-4814-bd29-05a89ad2e166",
+      "uuid": "11312d9f-7106-4122-a1a2-b1f466c9854c",
       "version": [
         1,
         0,
@@ -29,7 +29,7 @@
   ],
   "dependencies": [
     {
-      "uuid": "9c27ea80-a28c-46b4-8ac2-25259b583cb1",
+      "uuid": "e35a66bb-bc5c-4fc4-984a-e3242c217603",
       "version": [
         1,
         0,

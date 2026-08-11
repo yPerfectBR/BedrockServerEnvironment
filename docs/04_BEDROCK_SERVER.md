@@ -1,12 +1,13 @@
 # 🎮 Bedrock Server
 
+[Voltar ao índice](00_INDICE.md)
+
 ## Estrutura de Pastas
 
 ```
 bedrockServer/
-├── behavior_packs/     # Behavior packs (addons)
-├── resource_packs/      # Resource packs
 ├── worlds/             # Mundos do servidor
+│   └── world-bases/    # Bases de mundo para criar novos mundos
 ├── config/             # Configurações customizadas
 ├── server.properties   # Propriedades do servidor
 └── permissions.json    # Permissões
@@ -56,7 +57,14 @@ Define permissões de módulos para scripts. Exemplo:
 
 ### Desenvolvimento
 
-Os addons são desenvolvidos na pasta `development/`. Para compilar:
+Os addons são desenvolvidos na pasta `development/`. Compatibilidade:
+
+- `@minecraft/server` `2.9.0`
+- `@minecraft/server-ui` `2.1.0`
+- `@minecraft/server-net` beta estável de `1.26.40`
+- `@minecraft/vanilla-data` `1.26.40`
+
+Para compilar:
 
 ```bash
 cd development
@@ -67,14 +75,36 @@ npm run local-deploy
 
 ### Instalação
 
-1. Coloque os arquivos em `bedrockServer/behavior_packs/` ou `bedrockServer/resource_packs/`
+1. Use `development/` como fonte do addon e `npm run local-deploy` para enviar a saída para o servidor
 2. Reinicie o servidor ou recarregue o mundo
+
+### Mundos Base
+
+As bases de mundo ficam em `bedrockServer/worlds/world-bases/`. Elas já podem carregar opções como beta APIs de script. Para criar um mundo a partir de uma base:
+
+Linux/Mac:
+
+```bash
+./configure.sh
+```
+
+Windows:
+
+```powershell
+.\configure.ps1
+```
+
+Ao criar ou selecionar o mundo principal, a ferramenta:
+
+- atualiza `BEDROCK_LEVEL_NAME` no `.env`;
+- ajusta `levelname.txt` quando necessário;
+- grava `world_behavior_packs.json` e `world_resource_packs.json` no mundo usando UUID e version do addon em `development/`.
 
 ## Troubleshooting
 
 ### Servidor não inicia
 
-1. Verifique os logs: `docker-compose logs bedrock-server`
+1. Verifique os logs: `docker compose logs bedrock-server`
 2. Verifique se a porta está em uso
 3. Verifique se `BEDROCK_EULA=TRUE` no `.env`
 
@@ -83,4 +113,3 @@ npm run local-deploy
 1. Verifique se os arquivos estão na pasta correta
 2. Verifique os logs do servidor
 3. Alguns addons requerem reinicialização do servidor
-

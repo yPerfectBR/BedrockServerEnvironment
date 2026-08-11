@@ -1,11 +1,12 @@
 services:
   mongodb:
-    image: mongo:8.0
+    image: ${MONGODB_IMAGE:-mongo:8.0}
     container_name: bedrock-mongodb
     restart: unless-stopped
     ports:
       - "${MONGODB_PORT:-27017}:27017"
     environment:
+      GLIBC_TUNABLES: ${MONGODB_GLIBC_TUNABLES:-glibc.pthread.rseq=1}
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-admin123}
       MONGO_INITDB_DATABASE: ${MONGODB_DATABASE:-bedrock_db}
@@ -119,4 +120,3 @@ volumes:
 networks:
   bedrock-network:
     driver: bridge
-

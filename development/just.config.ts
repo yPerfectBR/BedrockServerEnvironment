@@ -1,20 +1,20 @@
-import { argv, parallel, series, task, tscTask } from "just-scripts";
 import {
-  BundleTaskParameters,
-  CopyTaskParameters,
   bundleTask,
-  cleanTask,
+  BundleTaskParameters,
   cleanCollateralTask,
+  cleanTask,
   copyTask,
+  CopyTaskParameters,
   coreLint,
-  mcaddonTask,
-  setupEnvironment,
-  ZipTaskParameters,
-  STANDARD_CLEAN_PATHS,
   DEFAULT_CLEAN_DIRECTORIES,
   getOrThrowFromProcess,
+  mcaddonTask,
+  setupEnvironment,
+  STANDARD_CLEAN_PATHS,
   watchTask,
+  ZipTaskParameters,
 } from "@minecraft/core-build-tasks";
+import { argv, parallel, series, task, tscTask } from "just-scripts";
 import path from "path";
 
 // Setup env variables
@@ -26,7 +26,7 @@ const isProduction = argv()['production'];
 
 const bundleTaskOptions: BundleTaskParameters = {
   entryPoint: path.join(__dirname, "./scripts/main.ts"),
-  external: ["@minecraft/server", "@minecraft/server-ui", "@minecraft/server-net"],
+  external: ["@minecraft/server", "@minecraft/server-ui", "@minecraft/server-net", "@minecraft/server-admin"],
   outfile: path.resolve(__dirname, "./dist/scripts/main.js"),
   minifyWhitespace: false,
   sourcemap: true,

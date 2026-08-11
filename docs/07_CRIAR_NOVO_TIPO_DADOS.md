@@ -1,5 +1,7 @@
 # 📊 Como Criar um Novo Tipo de Dados
 
+[Voltar ao índice](00_INDICE.md)
+
 Este guia mostra como criar um novo tipo de dados para salvar no banco de dados, desde o código no addon até as rotas, serviços e modelos na API.
 
 ## 📋 Visão Geral
@@ -72,8 +74,8 @@ export class StatsDatabase {
   private readonly collectionName: string;
   private readonly apiUrl: string;
 
-  private static readonly HTTP_METHOD_POST = HttpRequestMethod.Post;
-  private static readonly HTTP_METHOD_GET = HttpRequestMethod.Get;
+  private static readonly HTTP_METHOD_POST = HttpRequestMethod.POST;
+  private static readonly HTTP_METHOD_GET = HttpRequestMethod.GET;
 
   constructor(collectionName: string = "playerStats", apiUrl: string = "http://api:3000") {
     this.collectionName = collectionName;
@@ -276,7 +278,9 @@ export class StatsDatabase {
 
 ## Etapa 3: Addon - Implementar Lógica de Uso
 
-**Arquivo:** `development/scripts/main.ts` (ou criar um novo arquivo)
+O `development/scripts/main.ts` funciona como bootstrap. Para manter o addon organizado, crie um arquivo de evento em `development/scripts/events/` e, se a regra crescer, mova a lógica para `development/scripts/services/`.
+
+**Arquivo sugerido:** `development/scripts/events/playerStatsEvents.ts`
 
 Adicione a lógica para usar o novo tipo de dados:
 
@@ -872,7 +876,9 @@ await fastify.register(playerStatsRoutes, { prefix: '/api/playerStats' });
 ### Addon (development/)
 - ✅ `scripts/types/Database.ts` - Adicionar interfaces
 - ✅ `scripts/database/StatsDatabase.ts` - Nova classe Database
-- ✅ `scripts/main.ts` - Adicionar lógica de uso
+- ✅ `scripts/events/playerStatsEvents.ts` - Registrar eventos do novo recurso
+- ✅ `scripts/services/PlayerStatsService.ts` - Regras de negócio, quando necessário
+- ✅ `scripts/main.ts` - Importar e registrar o novo módulo
 
 ### API (server/)
 - ✅ `src/types/PlayerStats.ts` - Interface TypeScript
@@ -947,4 +953,3 @@ Após criar o novo tipo de dados, você pode:
 - Criar endpoints adicionais (ex: ranking, top players)
 - Implementar cache para melhor performance
 - Adicionar testes unitários e de integração
-

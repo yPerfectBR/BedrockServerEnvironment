@@ -1,5 +1,7 @@
 # 📡 API - Documentação
 
+[Voltar ao índice](00_INDICE.md)
+
 A API está disponível em `http://localhost:3000` (ou porta configurada no `.env`).
 
 ## Endpoints
@@ -52,4 +54,3 @@ Todas as respostas seguem o formato:
 ## Exemplos
 
 Consulte `docs/07_CRIAR_NOVO_TIPO_DADOS.md` para um guia completo de como criar novos tipos de dados e rotas.
-

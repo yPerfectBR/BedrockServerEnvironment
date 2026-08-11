@@ -1,0 +1,10 @@
+{
+  "name": "bedrock-server-environment-tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ferramentas de configuracao do ambiente Bedrock Server",
+  "scripts": {
+    "config": "node config/index.js",
+    "sync-addon": "node config/sync-addon.js"
+  }
+}

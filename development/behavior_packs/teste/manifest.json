@@ -1,9 +1,9 @@
 {
   "format_version": 2,
   "header": {
-    "name": "dataServer",
+    "name": "teste",
     "description": "",
-    "uuid": "9c27ea80-a28c-46b4-8ac2-25259b583cb1",
+    "uuid": "e35a66bb-bc5c-4fc4-984a-e3242c217603",
     "version": [
       1,
       0,
@@ -11,8 +11,8 @@
     ],
     "min_engine_version": [
       1,
-      20,
-      30
+      26,
+      40
     ]
   },
   "modules": [
@@ -20,7 +20,7 @@
       "description": "Script resources",
       "language": "javascript",
       "type": "script",
-      "uuid": "3e63736e-9d98-419e-b1cb-108bdb4ac2d5",
+      "uuid": "b3c343a0-633e-4638-94cb-2ee2983ff926",
       "version": [
         1,
         0,
@@ -31,7 +31,7 @@
   ],
   "dependencies": [
     {
-      "uuid": "183b08af-a0e1-4819-afba-5ca7ef04f58e",
+      "uuid": "60e479a6-f2c4-4996-8e47-761d6bdf1e6b",
       "version": [
         1,
         0,
@@ -40,7 +40,7 @@
     },
     {
       "module_name": "@minecraft/server",
-      "version": "2.0.0"
+      "version": "2.9.0"
     },
     {
       "module_name": "@minecraft/server-net",
@@ -48,7 +48,7 @@
     },
     {
       "module_name": "@minecraft/server-ui",
-      "version": "2.0.0"
+      "version": "2.1.0"
     }
   ]
 }
